@@ -1,6 +1,7 @@
 const chessboard = document.getElementById("chess-board");
-const tileSize = 64;
+const tileSize = 128;
 const tileMargin = 8;
+const tilePadding = 4;
 const leftOffset = 128;
 const topOffset = 128;
 
@@ -21,7 +22,10 @@ class Piece {
 			this.parent = document.createElement("div");
 			this.parent.classList.add("chess-div");
 
-			if(this.side !== "none") this.element.classList.add(side + "-piece");
+			if(this.side !== "none") {
+				this.element.classList.add(side + "-piece");
+				this.element.style.backgroundImage = "url(\"chess-piece-images/" + this.side + "-" + this.type.toLowerCase() + ".png\")";
+			}
 
 			this.parent.appendChild(this.element);
 			chessboard.appendChild(this.parent);
@@ -33,7 +37,7 @@ class Piece {
 
 			this.setPosition(row, column);
 			this.element.addEventListener("click", selectThisPiece);
-			this.element.innerHTML = this.rowColumnToString();
+			//this.element.innerHTML = this.rowColumnToString();
 
 			return;
 		}
@@ -47,6 +51,9 @@ class Piece {
 		if (this.theoretical) return;
 		this.parent.style.left = (column * (tileSize + tileMargin) + leftOffset) +"px";
 		this.parent.style.top = (row * (tileSize + tileMargin) + topOffset) +"px";
+
+		this.element.style.left = (tilePadding/2) +"px";
+		this.element.style.top = (tilePadding/2) +"px";
 	}
 
 	highlight(dehighlight = false) {
@@ -232,7 +239,7 @@ class Piece {
 	}
 
 	nameSelf() {
-		if (this.constructor.name != "EmptyPiece") this.element.innerHTML = this.constructor.name;
+		//if (this.constructor.name != "EmptyPiece") this.element.innerHTML = this.constructor.name;
 	}
 
 	print() {

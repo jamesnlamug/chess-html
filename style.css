@@ -1,17 +1,20 @@
 .chess-div {
 	position: absolute;
-	width: 64px;
-	height: 64px;
+	width: 128px;
+	height: 128px;
 }
 
 .highlighted-div {
+	border-radius: 50%;
 	background-color: #ea8;
 }
 
 .chess-piece {
 	border-radius: 50%;
-	width: 64px;
-	height: 64px;
+	position: absolute;
+	width: 124px;
+	height: 124px;
+	background-size: 124px 124px;
 	background-color: #f9f9f9;
 	border-style: solid;
 }
