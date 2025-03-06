@@ -47,8 +47,6 @@ class Pawn extends Piece {
 		let justMoved = lastMove[0] == piece;
 		let movedFromStartingRank = lastMove[1].row == 1 || lastMove[1].row == 6;
 
-		console.log(lastMove, piece);
-		console.log(isAPawn , justMoved , movedFromStartingRank);
 		return isAPawn && justMoved && movedFromStartingRank;
 	}
 }
