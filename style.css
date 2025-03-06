@@ -1,0 +1,19 @@
+.chess-piece {
+	position: absolute;
+	width: 64px;
+	height: 64px;
+}
+
+.white-piece {
+	background-color: #ddd;
+}
+
+.black-piece {
+	background-color: #222;
+	color: #fff;
+}
+
+.highlighted-piece {
+	background-color: #e88;
+	color: #fff;
+}
