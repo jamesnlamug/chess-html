@@ -24,8 +24,8 @@ class Pawn extends Piece {
 	getPossibleCaptures(board, lastMove="") {
 		let possibleCaptures = [];
 		let direction = this.side == "white" ? -1 : 1;
-		if (Piece.direction(board, this, direction, -1).side == Piece.opposite(this.side)) possibleCaptures.push(Piece.direction(board, this, -1, -1));
-		if (Piece.direction(board, this, direction, 1).side == Piece.opposite(this.side)) possibleCaptures.push(Piece.direction(board, this, 1, 1));
+		if (Piece.direction(board, this, direction, -1) !== null && Piece.direction(board, this, direction, -1).side == Piece.opposite(this.side)) possibleCaptures.push(Piece.direction(board, this, -1, -1));
+		if (Piece.direction(board, this, direction, 1) !== null && Piece.direction(board, this, direction, 1).side == Piece.opposite(this.side)) possibleCaptures.push(Piece.direction(board, this, 1, 1));
 
 		return possibleCaptures;
 	}
