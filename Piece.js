@@ -130,8 +130,6 @@ class Piece {
 			board.push(arr);
 		}
 
-		printBoard(board);
-
 		let piece1 = board[referencePiece1.row][referencePiece1.column];
 		let piece2 = board[referencePiece2.row][referencePiece2.column];
 
