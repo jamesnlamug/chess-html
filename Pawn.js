@@ -10,17 +10,11 @@ class Pawn extends Piece {
 		let currentPiece = this;
 		let nextPiece = this.forward(board, currentPiece);
 
-		console.log(nextPiece.constructor.name);
-
 		while(nextPiece.constructor.name == "EmptyPiece" && distance > 0) {
 			possibleMoves.push(nextPiece);
 			currentPiece = nextPiece;
 			nextPiece = this.forward(board, currentPiece);
 			distance --;
-
-			console.log(currentPiece);
-			console.log(nextPiece);
-			console.log(distance);
 
 		}
 
@@ -30,8 +24,8 @@ class Pawn extends Piece {
 	getPossibleCaptures(board, lastMove="") {
 		let possibleCaptures = [];
 		let direction = this.side == "white" ? -1 : 1;
-		if (Piece.direction(board, this, direction, -1).side == Piece.opposite(this.side)) possibleCaptures.push(Piece.direction(board, this, direction, -1));
-		if (Piece.direction(board, this, direction, 1).side == Piece.opposite(this.side)) possibleCaptures.push(Piece.direction(board, this, direction, 1));
+		if (Piece.direction(board, this, direction, -1).side == Piece.opposite(this.side)) possibleCaptures.push(Piece.direction(board, this, -1, -1));
+		if (Piece.direction(board, this, direction, 1).side == Piece.opposite(this.side)) possibleCaptures.push(Piece.direction(board, this, 1, 1));
 
 		return possibleCaptures;
 	}

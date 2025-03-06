@@ -39,8 +39,6 @@ class Piece {
 	highlight(dehighlight = false) {
 		if (dehighlight) this.element.classList.remove("highlighted-piece");
 		else this.element.classList.add("highlighted-piece");
-
-		console.log(dehighlight + ", " + this.row + ", " + this.column);
 	}
 
 	static direction(board, piece, rowOffset, columnOffset) {
@@ -48,9 +46,6 @@ class Piece {
 		let newColumn = piece.column + columnOffset;
 
 		if (newRow < 0 || newColumn < 0 || newRow >= board.length || newColumn >= board[0].length) return null;
-
-		console.log(newRow + ", " + newColumn);
-		console.log(board[newRow][newColumn].constructor.name);
 
 		return board[newRow][newColumn];
 	}

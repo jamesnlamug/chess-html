@@ -14,8 +14,6 @@ class Rook extends Piece {
 
 		for (let piece of possibleMoves) {
 			piece.element.innerHTML = "possible" + piece.id;
-			console.log(piece.element);
-			console.log(piece.row + ", " + piece.column + " , possible");
 		}
 
 		return possibleMoves;
@@ -29,10 +27,7 @@ class Rook extends Piece {
 		let nextPiece = Piece.direction(board, currentPiece, rowOffset, columnOffset);
 
 		while(nextPiece != null && nextPiece.constructor.name == "EmptyPiece") {
-
-			console.log("adding");
-
-
+			
 			possibleMoves.push(nextPiece);
 			currentPiece = nextPiece;
 			nextPiece = Piece.direction(board, currentPiece, rowOffset, columnOffset);
