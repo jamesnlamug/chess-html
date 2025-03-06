@@ -33,23 +33,23 @@ class Bishop extends Piece {
 
 	}
 
-	getPossibleCaptures(board, lastMove="") {
+	getPossibleCaptures(board, lastMove="", kingDanger = false) {
 		let possibleCaptures = [];
 
-		possibleCaptures = possibleCaptures.concat(this.getPossibleCaptureDirection(board, -1, -1));
-		possibleCaptures = possibleCaptures.concat(this.getPossibleCaptureDirection(board, -1, 1));
-		possibleCaptures = possibleCaptures.concat(this.getPossibleCaptureDirection(board, 1, -1));
-		possibleCaptures = possibleCaptures.concat(this.getPossibleCaptureDirection(board, 1, 1));
+		possibleCaptures = possibleCaptures.concat(this.getPossibleCaptureDirection(board, -1, -1, kingDanger));
+		possibleCaptures = possibleCaptures.concat(this.getPossibleCaptureDirection(board, -1,  1, kingDanger));
+		possibleCaptures = possibleCaptures.concat(this.getPossibleCaptureDirection(board,  1, -1, kingDanger));
+		possibleCaptures = possibleCaptures.concat(this.getPossibleCaptureDirection(board,  1,  1, kingDanger));
 
 		return possibleCaptures;
 	}
 
-	getPossibleCaptureDirection(board, rowOffset, columnOffset) {
+	getPossibleCaptureDirection(board, rowOffset, columnOffset, kingDanger) {
 		
 		let currentPiece = this;
 		let nextPiece = Piece.direction(board, currentPiece, rowOffset, columnOffset);
 
-		while(nextPiece !== null && nextPiece.constructor.name == "EmptyPiece") {
+		while(nextPiece !== null && (kingDanger || nextPiece.constructor.name == "EmptyPiece")) {
 
 			currentPiece = nextPiece;
 			nextPiece = Piece.direction(board, currentPiece, rowOffset, columnOffset);

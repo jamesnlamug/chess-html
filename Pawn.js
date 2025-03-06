@@ -21,11 +21,12 @@ class Pawn extends Piece {
 		return possibleMoves;
 	}
 
-	getPossibleCaptures(board, lastMove="") {
+	getPossibleCaptures(board, lastMove="", kingDanger = false) {
 		let possibleCaptures = [];
 		let direction = this.side == "white" ? -1 : 1;
-		if (Piece.direction(board, this, direction, -1) !== null && Piece.direction(board, this, direction, -1).side == Piece.opposite(this.side)) possibleCaptures.push(Piece.direction(board, this, direction, -1));
-		if (Piece.direction(board, this, direction, 1) !== null && Piece.direction(board, this, direction, 1).side == Piece.opposite(this.side)) possibleCaptures.push(Piece.direction(board, this, direction, 1));
+
+		if (Piece.direction(board, this, direction, -1) !== null && (kingDanger || Piece.direction(board, this, direction, -1).side == Piece.opposite(this.side))) possibleCaptures.push(Piece.direction(board, this, direction, -1));
+		if (Piece.direction(board, this, direction, 1) !== null && (kingDanger || Piece.direction(board, this, direction, 1).side == Piece.opposite(this.side))) possibleCaptures.push(Piece.direction(board, this, direction, 1));
 
 		return possibleCaptures;
 	}

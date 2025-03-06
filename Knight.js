@@ -25,24 +25,24 @@ class Knight extends Piece {
 		return [];
 	}
 
-	getPossibleCaptures(board, lastMove="") {
+	getPossibleCaptures(board, lastMove="", kingDanger = false) {
 		let possibleCaptures = [];
 
-		possibleCaptures = possibleCaptures.concat(this.getPossibleCapture(board, -2, -1));
-		possibleCaptures = possibleCaptures.concat(this.getPossibleCapture(board, -2,  1));
-		possibleCaptures = possibleCaptures.concat(this.getPossibleCapture(board,  2, -1));
-		possibleCaptures = possibleCaptures.concat(this.getPossibleCapture(board,  2,  1));
-		possibleCaptures = possibleCaptures.concat(this.getPossibleCapture(board, -1, -2));
-		possibleCaptures = possibleCaptures.concat(this.getPossibleCapture(board, -1,  2));
-		possibleCaptures = possibleCaptures.concat(this.getPossibleCapture(board,  1, -2));
-		possibleCaptures = possibleCaptures.concat(this.getPossibleCapture(board,  1,  2));
+		possibleCaptures = possibleCaptures.concat(this.getPossibleCapture(board, -2, -1, kingDanger));
+		possibleCaptures = possibleCaptures.concat(this.getPossibleCapture(board, -2,  1, kingDanger));
+		possibleCaptures = possibleCaptures.concat(this.getPossibleCapture(board,  2, -1, kingDanger));
+		possibleCaptures = possibleCaptures.concat(this.getPossibleCapture(board,  2,  1, kingDanger));
+		possibleCaptures = possibleCaptures.concat(this.getPossibleCapture(board, -1, -2, kingDanger));
+		possibleCaptures = possibleCaptures.concat(this.getPossibleCapture(board, -1,  2, kingDanger));
+		possibleCaptures = possibleCaptures.concat(this.getPossibleCapture(board,  1, -2, kingDanger));
+		possibleCaptures = possibleCaptures.concat(this.getPossibleCapture(board,  1,  2, kingDanger));
 
 		return possibleCaptures;
 	}
 
-	getPossibleCapture(board, rowOffset, columnOffset) {
+	getPossibleCapture(board, rowOffset, columnOffset, kingDanger) {
 		let queriedPiece = Piece.direction(board, this, rowOffset, columnOffset);
-		if (queriedPiece !== null && queriedPiece.side == Piece.opposite(this.side)) return [queriedPiece];
+		if (queriedPiece !== null && (kingDanger || queriedPiece.side == Piece.opposite(this.side))) return [queriedPiece];
 		return [];
 	}
 }
