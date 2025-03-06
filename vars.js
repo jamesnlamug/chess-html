@@ -13,14 +13,16 @@ function selectPiece(piece) {
 
 		dehighlightSelectedPiece();
 		dehighlightSelectedMoves();
-		dehighlightCaptures();
+		dehighlightSelectedCaptures();
 		return;
 	}
 
 	//select friendly piece
 	if (piece != null && (selectedPiece === null || selectedPiece.side == piece.side)) {
 
+		dehighlightSelectedPiece();
 		dehighlightSelectedMoves();
+		dehighlightSelectedCaptures();
 
 		selectedPiece = piece;
 		selectedPiece.highlight();
