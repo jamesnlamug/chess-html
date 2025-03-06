@@ -1,6 +1,15 @@
+.chess-div {
+	position: absolute;
+	width: 64px;
+	height: 64px;
+}
+
+.highlighted-div {
+	background-color: #ea8;
+}
+
 .chess-piece {
 	border-radius: 50%;
-	position: absolute;
 	width: 64px;
 	height: 64px;
 	background-color: #f9f9f9;
@@ -15,10 +24,5 @@
 .black-piece {
 	background-color: #804937;
 	border-color: #542d21;
-	color: #fff;
-}
-
-.highlighted-piece {
-	background-color: #e88;
 	color: #fff;
 }

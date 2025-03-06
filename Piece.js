@@ -11,12 +11,17 @@ class Piece {
 		this.id = column + 1 + (row)*8;
 		this.element = document.createElement("button");
 		this.element.classList.add("chess-piece");
+
+		this.parent = document.createElement("div");
+		this.parent.classList.add("chess-div");
+
 		this.movedBefore = false;
 		
 		this.side = side;
 		if(this.side !== "none") this.element.classList.add(side + "-piece");
 
-		chessboard.appendChild(this.element);
+		this.parent.appendChild(this.element);
+		chessboard.appendChild(this.parent);
 
 		this.setPosition(row, column);
 
@@ -33,13 +38,13 @@ class Piece {
 		this.row = row;
 		this.column = column;
 
-		this.element.style.left = (column * (tileSize + tileMargin) + leftOffset) +"px";
-		this.element.style.top = (row * (tileSize + tileMargin) + topOffset) +"px";
+		this.parent.style.left = (column * (tileSize + tileMargin) + leftOffset) +"px";
+		this.parent.style.top = (row * (tileSize + tileMargin) + topOffset) +"px";
 	}
 
 	highlight(dehighlight = false) {
-		if (dehighlight) this.element.classList.remove("highlighted-piece");
-		else this.element.classList.add("highlighted-piece");
+		if (dehighlight) this.parent.classList.remove("highlighted-div");
+		else this.parent.classList.add("highlighted-div");
 	}
 
 	static direction(board, piece, rowOffset, columnOffset) {
