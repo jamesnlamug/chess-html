@@ -9,7 +9,7 @@ function selectPiece(piece) {
 	if (selectedPiece == null && piece.constructor.name == "EmptyPiece") return;
 
 	//deselect current piece
-	if (piece == selectedPiece) {
+	if (piece == selectedPiece || (selectedPiece !== null && piece.side == Piece.opposite(selectedPiece.side) && !selectedCaptures.includes(piece))) {
 
 		dehighlightSelectedPiece();
 		dehighlightSelectedMoves();
