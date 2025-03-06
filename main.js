@@ -60,11 +60,22 @@ function putPawnRow(row, side) {
 
 function selectPiece(piece) {
 
-	//cannot select empty piece
-	if (game.selectedPiece == null && piece.constructor.name == "EmptyPiece") return;
+	let currentPieceExists = game.selectedPiece !== null;
+	let pieceExists = piece !== null;
 
-	//deselect current piece
-	if (piece == game.selectedPiece || (game.selectedPiece !== null && piece.side == Piece.opposite(game.selectedPiece.side) && !game.captures.includes(piece))) {
+	//cannot select null
+	if (!pieceExists) return;
+
+	let pieceIsSameAsCurrentPiece = piece == game.selectedPiece;
+	let pieceIsFriendly = piece.side == game.playerTurn;
+	let isMove = game.moves.includes(piece);
+	let isCapture = game.captures.includes(piece);
+
+	//cannot select unfriendly piece
+	if (!currentPieceExists && !pieceIsFriendly) return;
+
+	//deselect
+	if (pieceIsSameAsCurrentPiece || (currentPieceExists && !pieceIsFriendly && !isMove && !isCapture)) {
 
 		dehighlightSelectedPiece();
 		dehighlightSelectedMoves();
@@ -73,8 +84,7 @@ function selectPiece(piece) {
 	}
 
 	//select friendly piece
-	if (piece != null && (game.selectedPiece === null || game.selectedPiece.side == piece.side)) {
-
+	if (pieceIsFriendly) {
 		dehighlightSelectedPiece();
 		dehighlightSelectedMoves();
 		dehighlightSelectedCaptures();
@@ -90,30 +100,18 @@ function selectPiece(piece) {
 		}
 		return;
 	}
-
-	//move to space
-	if (game.selectedPiece !== null && game.moves.includes(piece)) {
+	
+	// move/capture
+	if (currentPieceExists && (isMove || isCapture)) {
 		dehighlightSelectedMoves();
-
-		game.lastMove = Piece.makeMove(game.grid, game.selectedPiece, piece, false);
+		
+		game.lastMove = Piece.makeMove(game.grid, game.selectedPiece, piece, isCapture);
 
 		//deselect
 		dehighlightSelectedPiece();
 		dehighlightSelectedMoves();
 		dehighlightSelectedCaptures();
-		return;
-	}
-
-	//capture piece
-	if (game.selectedPiece !== null && game.captures.includes(piece)) {
-		dehighlightSelectedCaptures();
-
-		game.lastMove = Piece.makeMove(game.grid, game.selectedPiece, piece, true);
-
-		//deselect
-		dehighlightSelectedPiece();
-		dehighlightSelectedMoves();
-		dehighlightSelectedCaptures();
+		game.playerTurn = Piece.opposite(game.playerTurn);
 		return;
 	}
 
