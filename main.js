@@ -100,6 +100,7 @@ function selectPiece(piece) {
 			
 			let vetted = Piece.vetMoveForChecks(game.grid, game.selectedPiece, piece, isCapture);
 			if (!vetted) {
+				console.log("removing move", piece);
 				game.moves.splice(game.moves.indexOf(piece), 1);
 			}
 			else piece.highlight();
