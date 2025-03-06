@@ -1,15 +1,20 @@
 .chess-piece {
+	border-radius: 50%;
 	position: absolute;
 	width: 64px;
 	height: 64px;
+	background-color: #f9f9f9;
+	border-style: solid;
 }
 
 .white-piece {
-	background-color: #ddd;
+	background-color: #e8c8a7;
+	border-color: #bf9d7a;
 }
 
 .black-piece {
-	background-color: #222;
+	background-color: #804937;
+	border-color: #542d21;
 	color: #fff;
 }
 
