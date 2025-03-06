@@ -1,6 +1,6 @@
 class King extends Piece {
-	constructor(row, column, side) {
-		super(row, column, side);
+	constructor(row, column, side, theoretical = false) {
+		super(row, column, side, theoretical);
 	}
 
 	getPossibleMoves(board) {
@@ -108,5 +108,9 @@ class King extends Piece {
 		}
 
 		return possibleDangers;
+	}
+
+	makeTheoreticalCopy() {
+		return new King(this.row, this.column, this.side, true);
 	}
 }

@@ -1,6 +1,6 @@
 class Queen extends Piece {
-	constructor(row, column, side) {
-		super(row, column, side);
+	constructor(row, column, side, theoretical = false) {
+		super(row, column, side, theoretical);
 	}
 
 	getPossibleMoves(board) {
@@ -56,15 +56,18 @@ class Queen extends Piece {
 		let currentPiece = this;
 		let nextPiece = Piece.direction(board, currentPiece, rowOffset, columnOffset);
 
-		while(nextPiece !== null && (kingDanger || nextPiece.constructor.name == "EmptyPiece")) {
+		while(nextPiece !== null && (nextPiece.constructor.name == "EmptyPiece")) {
 
 			currentPiece = nextPiece;
 			nextPiece = Piece.direction(board, currentPiece, rowOffset, columnOffset);
-
 		}
 
-		if (nextPiece !== null && nextPiece.side == Piece.opposite(this.side)) return [nextPiece];
-		return [];
+		if (nextPiece === null || (nextPiece.side == this.side && !kingDanger)) return [];
+		return [nextPiece];
 
+	}
+
+	makeTheoreticalCopy() {
+		return new Queen(this.row, this.column, this.side, true);
 	}
 }

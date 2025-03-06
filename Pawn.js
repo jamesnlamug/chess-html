@@ -1,6 +1,6 @@
 class Pawn extends Piece {
-	constructor(row, column, side) {
-		super(row, column, side);
+	constructor(row, column, side, theoretical = false) {
+		super(row, column, side, theoretical);
 	}
 
 	getPossibleMoves(board) {
@@ -48,5 +48,9 @@ class Pawn extends Piece {
 		let movedFromStartingRank = lastMove[1].row == 1 || lastMove[1].row == 6;
 
 		return isAPawn && justMoved && movedFromStartingRank;
+	}
+
+	makeTheoreticalCopy() {
+		return new Pawn(this.row, this.column, this.side, true);
 	}
 }

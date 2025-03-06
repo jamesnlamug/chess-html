@@ -85,6 +85,8 @@ function selectPiece(piece) {
 
 	//select friendly piece
 	if (pieceIsFriendly) {
+
+		console.log("vetting1");
 		dehighlightSelectedPiece();
 		dehighlightSelectedMoves();
 		dehighlightSelectedCaptures();
@@ -95,8 +97,24 @@ function selectPiece(piece) {
 		game.moves = game.selectedPiece.getPossibleMoves(game.grid);
 		game.captures = game.selectedPiece.getPossibleCaptures(game.grid, game.lastMove);
 
-		for (let piece of game.moves.concat(game.captures)) {
-			piece.highlight();
+		for (let piece of game.moves) {
+			
+			let vetted = Piece.vetMoveForChecks(game.grid, game.selectedPiece, piece, isCapture);
+			if (!vetted) {
+				console.log("removed", piece);
+				game.moves.splice(game.moves.indexOf(piece), 1);
+			}
+			else piece.highlight();
+		}
+
+		for (let piece of game.captures) {
+			
+			let vetted = Piece.vetMoveForChecks(game.grid, game.selectedPiece, piece, isCapture);
+			if (!vetted) {
+				console.log("removed", piece);
+				game.captures.splice(game.captures.indexOf(piece), 1);
+			}
+			else piece.highlight();
 		}
 		return;
 	}
@@ -105,6 +123,8 @@ function selectPiece(piece) {
 	if (currentPieceExists && (isMove || isCapture)) {
 		dehighlightSelectedMoves();
 		
+		Piece.isInCheck(game.grid, game.playerTurn);
+
 		game.lastMove = Piece.makeMove(game.grid, game.selectedPiece, piece, isCapture);
 
 		//deselect
@@ -138,15 +158,11 @@ function dehighlightSelectedCaptures() {
 	game.captures = [];
 }
 
-function printGrid() {
+function printBoard(board) {
 	for (let r=0; r<8; r++) {
-		let str = "[] ";
+		let str = "r" + r + "[ ";
 		for (let c=0; c<8; c++) {
-			str += game.grid[r][c].constructor.name + " ";
-
-			for (let i=0; i< (10 - game.grid[r][c].constructor.name); i++) {
-				str+= " ";
-			}
+			str += board[r][c].constructor.name.substring(0, 2) + " ";
 		}
 	
 		console.log(str+"]");

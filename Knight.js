@@ -1,6 +1,6 @@
 class Knight extends Piece {
-	constructor(row, column, side) {
-		super(row, column, side);
+	constructor(row, column, side, theoretical = false) {
+		super(row, column, side, theoretical);
 	}
 
 	getPossibleMoves(board) {
@@ -43,5 +43,9 @@ class Knight extends Piece {
 		let queriedPiece = Piece.direction(board, this, rowOffset, columnOffset);
 		if (queriedPiece !== null && (kingDanger || queriedPiece.side == Piece.opposite(this.side))) return [queriedPiece];
 		return [];
+	}
+
+	makeTheoreticalCopy() {
+		return new Knight(this.row, this.column, this.side, true);
 	}
 }
