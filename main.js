@@ -1,8 +1,11 @@
 //
-let selectedPiece = null;
-let selectedMoves = [];
-let selectedCaptures = [];
-let grid = [];
+let game = {
+	playerTurn: "white",
+	selectedPiece: null,
+	moves: [],
+	captures: [],
+	grid: []
+};
 
 
 for (let r=0; r<8; r++) {
@@ -11,14 +14,14 @@ for (let r=0; r<8; r++) {
 		arr.push(null);
 	}
 
-	grid.push(arr);
+	game.grid.push(arr);
 }
 
 putPieces();
 for (let r=0; r<8; r++) {
 	for (let c=0; c<8; c++) {
-		if (grid[r][c] === null) grid[r][c] = new EmptyPiece(r, c, "none");
-		grid[r][c].nameSelf();
+		if (game.grid[r][c] === null) game.grid[r][c] = new EmptyPiece(r, c, "none");
+		game.grid[r][c].nameSelf();
 	}
 }
 
@@ -33,20 +36,20 @@ function putPieces() {
 }
 
 function putPieceRow(row, side) {
-	grid[row][0] = new Rook(row, 0, side);
-	grid[row][1] = new Knight(row, 1, side);
-	grid[row][2] = new Bishop(row, 2, side);
-	grid[row][3] = new Queen(row, 3, side);
-	grid[row][4] = new King(row, 4, side);
-	grid[row][5] = new Bishop(row, 5, side);
-	grid[row][6] = new Knight(row, 6, side);
-	grid[row][7] = new Rook(row, 7, side);
+	game.grid[row][0] = new Rook(row, 0, side);
+	game.grid[row][1] = new Knight(row, 1, side);
+	game.grid[row][2] = new Bishop(row, 2, side);
+	game.grid[row][3] = new Queen(row, 3, side);
+	game.grid[row][4] = new King(row, 4, side);
+	game.grid[row][5] = new Bishop(row, 5, side);
+	game.grid[row][6] = new Knight(row, 6, side);
+	game.grid[row][7] = new Rook(row, 7, side);
 
 }
 
 function putPawnRow(row, side) {
 	for (let i=0; i<8; i++) {
-		grid[row][i] = new Pawn(row, i, side);
+		game.grid[row][i] = new Pawn(row, i, side);
 	}
 }
 
@@ -57,10 +60,10 @@ function putPawnRow(row, side) {
 function selectPiece(piece) {
 
 	//cannot select empty piece
-	if (selectedPiece == null && piece.constructor.name == "EmptyPiece") return;
+	if (game.selectedPiece == null && piece.constructor.name == "EmptyPiece") return;
 
 	//deselect current piece
-	if (piece == selectedPiece || (selectedPiece !== null && piece.side == Piece.opposite(selectedPiece.side) && !selectedCaptures.includes(piece))) {
+	if (piece == game.selectedPiece || (game.selectedPiece !== null && piece.side == Piece.opposite(game.selectedPiece.side) && !game.captures.includes(piece))) {
 
 		dehighlightSelectedPiece();
 		dehighlightSelectedMoves();
@@ -69,29 +72,29 @@ function selectPiece(piece) {
 	}
 
 	//select friendly piece
-	if (piece != null && (selectedPiece === null || selectedPiece.side == piece.side)) {
+	if (piece != null && (game.selectedPiece === null || game.selectedPiece.side == piece.side)) {
 
 		dehighlightSelectedPiece();
 		dehighlightSelectedMoves();
 		dehighlightSelectedCaptures();
 
-		selectedPiece = piece;
-		selectedPiece.highlight();
+		game.selectedPiece = piece;
+		game.selectedPiece.highlight();
 
-		selectedMoves = selectedPiece.getPossibleMoves(grid);
-		selectedCaptures = selectedPiece.getPossibleCaptures(grid);
+		game.moves = game.selectedPiece.getPossibleMoves(game.grid);
+		game.captures = game.selectedPiece.getPossibleCaptures(game.grid);
 
-		for (let piece of selectedMoves.concat(selectedCaptures)) {
+		for (let piece of game.moves.concat(game.captures)) {
 			piece.highlight();
 		}
 		return;
 	}
 
 	//move to space
-	if (selectedPiece !== null && selectedMoves.includes(piece)) {
+	if (game.selectedPiece !== null && game.moves.includes(piece)) {
 		dehighlightSelectedMoves();
 
-		Piece.makeMove(grid, selectedPiece, piece);
+		Piece.makeMove(game.grid, game.selectedPiece, piece);
 
 		//deselect
 		dehighlightSelectedPiece();
@@ -101,20 +104,20 @@ function selectPiece(piece) {
 	}
 
 	//capture piece
-	if (selectedPiece !== null && selectedCaptures.includes(piece)) {
+	if (game.selectedPiece !== null && game.captures.includes(piece)) {
 		dehighlightSelectedCaptures();
 
-		let tempRow = selectedPiece.row;
-		let tempColumn = selectedPiece.column;
+		let tempRow = game.selectedPiece.row;
+		let tempColumn = game.selectedPiece.column;
 
 		let tempRow2 = piece.row;
 		let tempColumn2 = piece.column;
 
-		selectedPiece.setPosition(tempRow2, tempColumn2);
-		grid[tempRow2][tempColumn2] = selectedPiece;
+		game.selectedPiece.setPosition(tempRow2, tempColumn2);
+		game.grid[tempRow2][tempColumn2] = game.selectedPiece;
 
 		piece.element.remove();
-		grid[tempRow][tempColumn] = new EmptyPiece(tempRow, tempColumn, "none");
+		game.grid[tempRow][tempColumn] = new EmptyPiece(tempRow, tempColumn, "none");
 
 		//deselect
 		dehighlightSelectedPiece();
@@ -126,33 +129,33 @@ function selectPiece(piece) {
 }
 
 function dehighlightSelectedPiece() {
-	if (selectedPiece != null) selectedPiece.highlight(true);
-	selectedPiece = null;
+	if (game.selectedPiece != null) game.selectedPiece.highlight(true);
+	game.selectedPiece = null;
 }
 
 function dehighlightSelectedMoves() {
-	for (let piece of selectedMoves) {
+	for (let piece of game.moves) {
 		piece.highlight(true);
 	}
 
-	selectedMoves = [];
+	game.moves = [];
 }
 
 function dehighlightSelectedCaptures() {
-	for (let piece of selectedCaptures) {
+	for (let piece of game.captures) {
 		piece.highlight(true);
 	}
 
-	selectedCaptures = [];
+	game.captures = [];
 }
 
 function printGrid() {
 	for (let r=0; r<8; r++) {
 		let str = "[] ";
 		for (let c=0; c<8; c++) {
-			str += grid[r][c].constructor.name + " ";
+			str += game.grid[r][c].constructor.name + " ";
 
-			for (let i=0; i< (10 - grid[r][c].constructor.name); i++) {
+			for (let i=0; i< (10 - game.grid[r][c].constructor.name); i++) {
 				str+= " ";
 			}
 		}
