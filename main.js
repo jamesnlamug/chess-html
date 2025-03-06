@@ -4,7 +4,8 @@ let game = {
 	selectedPiece: null,
 	moves: [],
 	captures: [],
-	grid: []
+	grid: [],
+	lastMove: []
 };
 
 
@@ -82,7 +83,7 @@ function selectPiece(piece) {
 		game.selectedPiece.highlight();
 
 		game.moves = game.selectedPiece.getPossibleMoves(game.grid);
-		game.captures = game.selectedPiece.getPossibleCaptures(game.grid);
+		game.captures = game.selectedPiece.getPossibleCaptures(game.grid, game.lastMove);
 
 		for (let piece of game.moves.concat(game.captures)) {
 			piece.highlight();
@@ -94,7 +95,7 @@ function selectPiece(piece) {
 	if (game.selectedPiece !== null && game.moves.includes(piece)) {
 		dehighlightSelectedMoves();
 
-		Piece.makeMove(game.grid, game.selectedPiece, piece);
+		game.lastMove = Piece.makeMove(game.grid, game.selectedPiece, piece, false);
 
 		//deselect
 		dehighlightSelectedPiece();
@@ -107,17 +108,7 @@ function selectPiece(piece) {
 	if (game.selectedPiece !== null && game.captures.includes(piece)) {
 		dehighlightSelectedCaptures();
 
-		let tempRow = game.selectedPiece.row;
-		let tempColumn = game.selectedPiece.column;
-
-		let tempRow2 = piece.row;
-		let tempColumn2 = piece.column;
-
-		game.selectedPiece.setPosition(tempRow2, tempColumn2);
-		game.grid[tempRow2][tempColumn2] = game.selectedPiece;
-
-		piece.element.remove();
-		game.grid[tempRow][tempColumn] = new EmptyPiece(tempRow, tempColumn, "none");
+		game.lastMove = Piece.makeMove(game.grid, game.selectedPiece, piece, true);
 
 		//deselect
 		dehighlightSelectedPiece();

@@ -55,7 +55,7 @@ class Piece {
 		return side=="white" ? "black" : "white";
 	}
 
-	static makeMove(board, piece1, piece2) {
+	static makeMove(board, piece1, piece2, isCapture) {
 
 		piece1.movedBefore = true;
 		piece2.movedBefore = true;
@@ -66,20 +66,35 @@ class Piece {
 		let tempRow2 = piece2.row;
 		let tempColumn2 = piece2.column;
 
+		if (!isCapture) {
+			piece2.setPosition(tempRow, tempColumn);
+			board[tempRow][tempColumn] = piece2;
+		}
+
+		if (isCapture) {
+			if (piece2.constructor.name == "EmptyPiece") {
+				//en passant
+				let enPassantedPawn = Piece.direction(board, piece1, 0, piece2.column - piece1.column);
+				
+				piece2 = Piece.makeMove(board, piece2, enPassantedPawn)[1];
+			}
+			piece2.element.remove();
+			game.grid[tempRow][tempColumn] = new EmptyPiece(tempRow, tempColumn, "none");
+		}
+
 		piece1.setPosition(tempRow2, tempColumn2);
 		board[tempRow2][tempColumn2] = piece1;
 
-		piece2.setPosition(tempRow, tempColumn);
-		board[tempRow][tempColumn] = piece2;
+		if (piece1.constructor.name != "King") return [piece1, piece2];
 
-		if (piece1.constructor.name != "King") return;
-
-		if (Math.abs(piece2.column - piece1.column) <= 1) return;
+		if (Math.abs(piece2.column - piece1.column) <= 1) return [piece1, piece2];
 
 		let rookOffset = Math.sign(piece2.column - piece1.column);
 		let rook = board[piece1.row][(rookOffset === 1 ? 0 : 7)];
 		Piece.makeMove(board, rook, board[piece1.row][piece1.column + rookOffset]);
 		
+		return [piece1, piece2];
+
 	}
 
 	nameSelf() {

@@ -20,12 +20,12 @@ class Pawn extends Piece {
 		return possibleMoves;
 	}
 
-	getPossibleCaptures(board, lastMove="", kingDanger = false) {
+	getPossibleCaptures(board, lastMove=[], kingDanger = false) {
 		let possibleCaptures = [];
 		let direction = this.side == "white" ? -1 : 1;
 
-		if (Piece.direction(board, this, direction, -1) !== null && (kingDanger || Piece.direction(board, this, direction, -1).side == Piece.opposite(this.side))) possibleCaptures.push(Piece.direction(board, this, direction, -1));
-		if (Piece.direction(board, this, direction, 1) !== null && (kingDanger || Piece.direction(board, this, direction, 1).side == Piece.opposite(this.side))) possibleCaptures.push(Piece.direction(board, this, direction, 1));
+		if (Piece.direction(board, this, direction, -1) !== null && (kingDanger || this.canEnpassant(board, lastMove, -1) || Piece.direction(board, this, direction, -1).side == Piece.opposite(this.side))) possibleCaptures.push(Piece.direction(board, this, direction, -1));
+		if (Piece.direction(board, this, direction, 1) !== null && (kingDanger || this.canEnpassant(board, lastMove, 1) || Piece.direction(board, this, direction, 1).side == Piece.opposite(this.side))) possibleCaptures.push(Piece.direction(board, this, direction, 1));
 
 		return possibleCaptures;
 	}
@@ -33,5 +33,22 @@ class Pawn extends Piece {
 	forward(board, piece) {
 		let direction = this.side == "white" ? -1 : 1;
 		return board[piece.row+direction][piece.column];
+	}
+
+	canEnpassant(board, lastMove, columnOffset) {
+		if (lastMove.length == 0) return false;
+
+		let piece = Piece.direction(board, this, 0, columnOffset);
+		
+		let isAPiece = piece !== null;
+		if (!isAPiece) return false;
+
+		let isAPawn = piece.constructor.name == "Pawn";
+		let justMoved = lastMove[0] == piece;
+		let movedFromStartingRank = lastMove[1].row == 1 || lastMove[1].row == 6;
+
+		console.log(lastMove, piece);
+		console.log(isAPawn , justMoved , movedFromStartingRank);
+		return isAPawn && justMoved && movedFromStartingRank;
 	}
 }
