@@ -90,17 +90,7 @@ function selectPiece(piece) {
 	if (selectedPiece !== null && selectedMoves.includes(piece)) {
 		dehighlightSelectedMoves();
 
-		let tempRow = selectedPiece.row;
-		let tempColumn = selectedPiece.column;
-
-		let tempRow2 = piece.row;
-		let tempColumn2 = piece.column;
-
-		selectedPiece.setPosition(tempRow2, tempColumn2);
-		grid[tempRow2][tempColumn2] = selectedPiece;
-
-		piece.setPosition(tempRow, tempColumn);
-		grid[tempRow][tempColumn] = piece;
+		Piece.makeMove(grid, selectedPiece, piece);
 
 		//deselect
 		dehighlightSelectedPiece();

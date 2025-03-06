@@ -2,7 +2,6 @@ class King extends Piece {
 	constructor(row, column, side) {
 		super(row, column, side);
 		this.element.innerHTML = "This is a King";
-		this.movedBefore = false;
 	}
 
 	getPossibleMoves(board) {
@@ -17,6 +16,8 @@ class King extends Piece {
 				possibleMoves = possibleMoves.concat(this.getPossibleMove(board, rr, cc));
 			}
 		}
+
+		possibleMoves = possibleMoves.concat(this.getPossibleCastling(board));
 		
 		return possibleMoves;
 	}
@@ -49,15 +50,35 @@ class King extends Piece {
 		return [];
 	}
 
-	/*getPossibleCastling(board) {
+	getPossibleCastling(board) {
+
+		let possibleCastles = [];
+		if (this.movedBefore) return possibleCastles;
+
 		let possibleDangers = this.getPossibleDangers(board);
-		if (possibleDangers.includes(this.getPossibleCapture(board, rr, cc)[0])) continue;
 
-		if ()
+		if (!Piece.direction(board, this, 0, 3).movedBefore
+		&& Piece.direction(board, this, 0, 2).constructor.name == "EmptyPiece"
+		&& Piece.direction(board, this, 0, 2).constructor.name == "EmptyPiece"
+		&& !possibleDangers.includes(Piece.direction(board, this, 0, 2))
+		&& !possibleDangers.includes(Piece.direction(board, this, 0, 1))
+		) {
+			possibleCastles.push(Piece.direction(board, this, 0, 2));
+		}
 
+		if (!Piece.direction(board, this, 0, -4).movedBefore
+		&& Piece.direction(board, this, 0, -3).constructor.name == "EmptyPiece"
+		&& Piece.direction(board, this, 0, -2).constructor.name == "EmptyPiece"
+		&& Piece.direction(board, this, 0, -1).constructor.name == "EmptyPiece"
+		&& !possibleDangers.includes(Piece.direction(board, this, 0, -2))
+		&& !possibleDangers.includes(Piece.direction(board, this, 0, -1))
+		) {
+			possibleCastles.push(Piece.direction(board, this, 0, -2));
+		}
 
+		return possibleCastles;
 	}
-*/
+
 	getPossibleDangers(board) {
 
 		let enemyPieces = [];

@@ -2,7 +2,6 @@ class Rook extends Piece {
 	constructor(row, column, side) {
 		super(row, column, side);
 		this.element.innerHTML = "This is a Rook";
-		this.movedBefore = false;
 	}
 
 	getPossibleMoves(board) {
