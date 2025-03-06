@@ -81,4 +81,8 @@ class Piece {
 		Piece.makeMove(board, rook, board[piece1.row][piece1.column + rookOffset]);
 		
 	}
+
+	nameSelf() {
+		if (this.constructor.name != "EmptyPiece") this.element.innerHTML = this.constructor.name;
+	}
 }

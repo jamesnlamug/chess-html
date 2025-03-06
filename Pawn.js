@@ -1,7 +1,6 @@
 class Pawn extends Piece {
 	constructor(row, column, side) {
 		super(row, column, side);
-		this.element.innerHTML = "This is a Pawn";
 	}
 
 	getPossibleMoves(board) {
