@@ -112,10 +112,6 @@ class Piece {
 	//returns true for safe moves
 	static vetMoveForChecks(referenceBoard, referencePiece1, referencePiece2, isCapture) {
 
-		console.log("---");
-		console.log("---");
-		console.log("---");
-		console.log("vetting move",referencePiece1.rowColumnToString(), "to", referencePiece2.rowColumnToString());
 		//new board disconnected from reference
 		let board = [];
 
@@ -127,7 +123,6 @@ class Piece {
 			board.push(arr);
 		}
 
-		console.log("theoryboard init");
 		printBoard(board);
 
 		let piece1 = board[referencePiece1.row][referencePiece1.column];
@@ -167,10 +162,6 @@ class Piece {
 			Piece.makeMove(board, rook, board[piece1.row][piece1.column + rookOffset]);
 		}
 		
-		console.log("theoryboard final");
-		printBoard(board);
-
-		console.log(!Piece.isInCheck(board, referencePiece1.side));
 		return !Piece.isInCheck(board, referencePiece1.side);
 	}
 

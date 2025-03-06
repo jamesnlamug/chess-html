@@ -86,7 +86,6 @@ function selectPiece(piece) {
 	//select friendly piece
 	if (pieceIsFriendly) {
 
-		console.log("vetting1");
 		dehighlightSelectedPiece();
 		dehighlightSelectedMoves();
 		dehighlightSelectedCaptures();
@@ -101,7 +100,6 @@ function selectPiece(piece) {
 			
 			let vetted = Piece.vetMoveForChecks(game.grid, game.selectedPiece, piece, isCapture);
 			if (!vetted) {
-				console.log("removed", piece);
 				game.moves.splice(game.moves.indexOf(piece), 1);
 			}
 			else piece.highlight();
@@ -111,7 +109,6 @@ function selectPiece(piece) {
 			
 			let vetted = Piece.vetMoveForChecks(game.grid, game.selectedPiece, piece, isCapture);
 			if (!vetted) {
-				console.log("removed", piece);
 				game.captures.splice(game.captures.indexOf(piece), 1);
 			}
 			else piece.highlight();
