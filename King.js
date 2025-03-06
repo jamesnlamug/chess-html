@@ -58,7 +58,7 @@ class King extends Piece {
 
 		if (!Piece.direction(board, this, 0, 3).movedBefore
 		&& Piece.direction(board, this, 0, 2).constructor.name == "EmptyPiece"
-		&& Piece.direction(board, this, 0, 2).constructor.name == "EmptyPiece"
+		&& Piece.direction(board, this, 0, 1).constructor.name == "EmptyPiece"
 		&& !possibleDangers.includes(Piece.direction(board, this, 0, 2))
 		&& !possibleDangers.includes(Piece.direction(board, this, 0, 1))
 		) {
