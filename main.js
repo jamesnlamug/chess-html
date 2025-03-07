@@ -49,11 +49,25 @@ play("D2", "B4");
 play("D4", "C3");
 */
 
+/*
 play("F2", "F3");
 play("E7", "E6");
 
 play("G2", "G4");
 play("D8", "H4");
+*/
+
+
+play("E2", "E4");
+play("E7", "E5");
+
+play("D1", "H5");
+play("B8", "C6");
+
+play("F1", "C4");
+play("F8", "C5");
+
+play("H5", "F7");
 
 function putPieces() {
 
