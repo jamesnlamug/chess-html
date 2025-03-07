@@ -2,7 +2,7 @@ const chessboard = document.getElementById("chess-board");
 const tileSize = 128;
 const tileMargin = 8;
 const tilePadding = 4;
-const leftOffset = 128;
+const leftOffset = 256;
 const topOffset = 128;
 
 class Piece {
