@@ -18,7 +18,13 @@ for (let r=0; r<8; r++) {
 	game.grid.push(arr);
 }
 
-putPieces();
+//putPieces();
+
+place("King", "H1", "white");
+place("Queen", "E6", "white");
+place("Rook", "G6", "white");
+place("King", "H8", "black");
+
 for (let r=0; r<8; r++) {
 	for (let c=0; c<8; c++) {
 		if (game.grid[r][c] === null) game.grid[r][c] = new EmptyPiece(r, c, "none");
@@ -57,7 +63,7 @@ play("G2", "G4");
 play("D8", "H4");
 */
 
-
+/*
 play("E2", "E4");
 play("E7", "E5");
 
@@ -68,6 +74,39 @@ play("F1", "C4");
 play("F8", "C5");
 
 play("H5", "F7");
+*/
+
+function place(className, position, side) {
+	let char1 = position.substring(0, 1).toLowerCase();
+	let char2 = position.substring(1, 2);
+	let rows = ["a","b","c","d","e","f","g","h"];
+	let r = 8 - char2;
+	let c = rows.indexOf(char1);
+
+	let piece;
+
+	switch (className) {
+		case "King":
+			piece = new King(r, c, side); break;
+		
+		case "Queen":
+			piece = new Queen(r, c, side); break;
+
+		case "Rook":
+			piece = new Rook(r, c, side); break;
+
+		case "Knight":
+			piece = new Knight(r, c, side); break;
+
+		case "Bishop":
+			piece = new Bishop(r, c, side); break;
+
+		case "Pawn":
+			piece = new Pawn(r, c, side); break;
+	}
+
+	game.grid[r][c] = piece;
+}
 
 function putPieces() {
 
@@ -177,7 +216,9 @@ function selectPiece(piece) {
 		dehighlightSelectedCaptures();
 		game.playerTurn = Piece.opposite(game.playerTurn);
 
-		if(Piece.checkForCheckmate(game.grid, game.playerTurn)) endGame(Piece.opposite(game.playerTurn));
+		if(Piece.checkForCheckmate(game.grid, game.playerTurn)) {
+			endGame(Piece.opposite(game.playerTurn), Piece.isInCheck(game.grid, game.playerTurn));
+		}
 		return;
 	}
 
@@ -244,9 +285,9 @@ function listout(list) {
 
 const uiWinner = document.getElementById("ui-checkmate");
 
-function endGame(winner) {
-	if (winner == "") {
-		uiWinner.innerHTML = "Draw!";
+function endGame(winner, checkmate) {
+	if (!checkmate) {
+		uiWinner.innerHTML = "Draw - " + winner + " stalemated " + Piece.opposite(winner);
 		return;
 	}
 
