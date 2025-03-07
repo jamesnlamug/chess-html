@@ -21,36 +21,12 @@ class Pawn extends Piece {
 	}
 
 	getPossibleCaptures(board, lastMove=[], kingDanger = false) {
+
 		let possibleCaptures = [];
 		let direction = this.side == "white" ? -1 : 1;
-/*
-		if (!this.theoretical) {
-		console.log(this.rowColumnToString());
-		console.log("forward left", Piece.direction(board, this, direction, -1));
-		console.log("forward right", Piece.direction(board, this, direction, 1));
-		if (Piece.direction(board, this, direction, -1) !== null)
-		{
-			console.log("forward left", Piece.direction(board, this, direction, -1).side == Piece.opposite(this.side));
-		}
-
-		if (Piece.direction(board, this, direction, 1) !== null)
-			{
-				console.log("forward right", Piece.direction(board, this, direction, 1).side == Piece.opposite(this.side));
-			}
-
-		console.log("forward left", this.canEnpassant(board, lastMove, -1));
-		console.log("forward right", this.canEnpassant(board, lastMove, 1));
-	}*/
-
-		if (Piece.direction(board, this, direction, 1) !== null) console.log(((Piece.direction(board, this, direction,  1) !== null) +",,, "+ kingDanger +",,, "+ this.canEnpassant(board, lastMove,  1) +",,, "+ (Piece.direction(board, this, direction,  1).side == Piece.opposite(this.side))));
 
 		if (Piece.direction(board, this, direction, -1) !== null && (kingDanger || this.canEnpassant(board, lastMove, -1) || Piece.direction(board, this, direction, -1).side == Piece.opposite(this.side))) possibleCaptures.push(Piece.direction(board, this, direction, -1));
-		if (Piece.direction(board, this, direction,  1) !== null && (kingDanger || this.canEnpassant(board, lastMove,  1) || Piece.direction(board, this, direction,  1).side == Piece.opposite(this.side))) possibleCaptures.push(Piece.direction(board, this, direction,  1));
-
-		if (!this.theoretical) {
-		console.log(this.rowColumnToString());
-
-		console.log(possibleCaptures);}
+		if (Piece.direction(board, this, direction,  1) !== null && (kingDanger || this.canEnpassant(board, lastMove,  1) || Piece.direction(board, this, direction,  1).side == Piece.opposite(this.side))) possibleCaptures.push(Piece.direction(board, this, direction, 1));
 
 		return possibleCaptures;
 	}
