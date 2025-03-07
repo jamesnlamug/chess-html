@@ -29,7 +29,7 @@ for (let r=0; r<8; r++) {
 let interactions = [];
 let interactionLoop = setInterval(playInteraction, 20);
 
-
+/*
 play("E2", "E4");
 play("E7", "E5");
 
@@ -47,7 +47,13 @@ play("F6", "D4");
 
 play("D2", "B4");
 play("D4", "C3");
+*/
 
+play("F2", "F3");
+play("E7", "E6");
+
+play("G2", "G4");
+play("D8", "H4");
 
 function putPieces() {
 
@@ -156,6 +162,8 @@ function selectPiece(piece) {
 		dehighlightSelectedMoves();
 		dehighlightSelectedCaptures();
 		game.playerTurn = Piece.opposite(game.playerTurn);
+
+		if(Piece.checkForCheckmate(game.grid, game.playerTurn)) endGame(Piece.opposite(game.playerTurn));
 		return;
 	}
 
@@ -218,4 +226,16 @@ function listout(list) {
 	for (let p of list) {
 		console.log(p.rowColumnToString(), p.type);
 	}
+}
+
+const uiWinner = document.getElementById("ui-checkmate");
+
+function endGame(winner) {
+	if (winner == "") {
+		uiWinner.innerHTML = "Draw!";
+		return;
+	}
+
+	uiWinner.innerHTML = winner + " won!";
+	return;
 }

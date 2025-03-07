@@ -31,12 +31,12 @@ class Piece {
 			chessboard.appendChild(this.parent);
 
 			let piece = this;
-			let selectThisPiece = function() {
+			this.selectionFunction = function() {
 				selectPiece(piece);
 			}
 
 			this.setPosition(row, column);
-			this.element.addEventListener("click", selectThisPiece);
+			this.element.addEventListener("click", this.selectionFunction);
 			//this.element.innerHTML = this.rowColumnToString();
 
 			return;
@@ -114,6 +114,56 @@ class Piece {
 		
 		return [piece1, piece2];
 
+	}
+
+	//for checkmate
+	static checkForCheckmate(board, side) {
+		let pieces = Piece.findPieces(board, side);
+
+		let allMoves = [];
+		let allCaptures = [];
+
+		for (let piece of pieces) {
+			let possibleMoves = piece.getPossibleMoves(board);
+			for (let piece2 of possibleMoves) {
+				if (piece2 === null) continue;
+				
+				let obj = {
+					piece1: piece,
+					piece2: piece2
+				}
+				allMoves.push(obj);
+			}
+
+			let possibleCaptures = piece.getPossibleCaptures(board);
+			for (let piece2 of possibleCaptures) {
+				if (piece2 === null) continue;
+				
+				let obj = {
+					piece1: piece,
+					piece2: piece2
+				}
+				allCaptures.push(obj);
+			}
+		}
+
+		for (let i=allMoves.length-1; i>=0; i--) {
+			
+			let vetted = Piece.vetMoveForChecks(board, allMoves[i].piece1, allMoves[i].piece2, false);
+			if (!vetted) {
+				allMoves.splice(i, 1);
+			}
+		}
+
+		for (let i=allCaptures.length-1; i>=0; i--) {
+			
+			let vetted = Piece.vetMoveForChecks(board, allCaptures[i].piece1, allCaptures[i].piece2, true);
+			if (!vetted) {
+				allCaptures.splice(i, 1);
+			}
+		}
+
+		return allMoves.length + allCaptures == 0;
 	}
 
 	//returns true for safe moves
