@@ -52,7 +52,7 @@ class King extends Piece {
 	getPossibleCastling(board) {
 
 		let possibleCastles = [];
-		if (this.movedBefore) return possibleCastles;
+		if (this.movedBefore || Piece.isInCheck(board, this.side)) return [];
 
 		let possibleDangers = this.getPossibleDangers(board);
 

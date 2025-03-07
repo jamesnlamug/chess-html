@@ -26,6 +26,29 @@ for (let r=0; r<8; r++) {
 	}
 }
 
+let interactions = [];
+let interactionLoop = setInterval(playInteraction, 20);
+
+
+play("E2", "E4");
+play("E7", "E5");
+
+play("D1", "G4");
+play("G7", "G5");
+
+play("G4", "F4");
+play("E5", "F4");
+
+play("D2", "D3");
+play("D8", "F6");
+
+play("C1", "D2");
+play("F6", "D4");
+
+play("D2", "B4");
+play("D4", "C3");
+
+
 function putPieces() {
 
 	putPieceRow(0, "black");
@@ -96,21 +119,24 @@ function selectPiece(piece) {
 		game.moves = game.selectedPiece.getPossibleMoves(game.grid);
 		game.captures = game.selectedPiece.getPossibleCaptures(game.grid, game.lastMove);
 
-		for (let piece of game.moves) {
+		for (let i=game.moves.length-1; i>=0; i--) {
 			
-			let vetted = Piece.vetMoveForChecks(game.grid, game.selectedPiece, piece, isCapture);
+			let piece = game.moves[i];
+			let vetted = Piece.vetMoveForChecks(game.grid, game.selectedPiece, piece, false);
 			if (!vetted) {
-				console.log("removing move", piece);
-				game.moves.splice(game.moves.indexOf(piece), 1);
+				//console.log("REMOVED" + piece.rowColumnToString());
+				game.moves.splice(i, 1);
 			}
 			else piece.highlight();
 		}
 
-		for (let piece of game.captures) {
+		for (let i=game.captures.length-1; i>=0; i--) {
 			
-			let vetted = Piece.vetMoveForChecks(game.grid, game.selectedPiece, piece, isCapture);
+			let piece = game.captures[i];
+			let vetted = Piece.vetMoveForChecks(game.grid, game.selectedPiece, piece, true);
 			if (!vetted) {
-				game.captures.splice(game.captures.indexOf(piece), 1);
+				//console.log("REMOVED" + piece.rowColumnToString());
+				game.captures.splice(i, 1);
 			}
 			else piece.highlight();
 		}
@@ -164,5 +190,32 @@ function printBoard(board) {
 		}
 	
 		console.log(str+"]");
+	}
+}
+
+function play(string1, string2) {
+	interactions.push(function() { selectPiece(stringToPiece(game.grid, string1)) });
+	interactions.push(function() { selectPiece(stringToPiece(game.grid, string2)) });
+}
+
+function stringToPiece(board, string) {
+	let char1 = string.substring(0, 1).toLowerCase();
+	let char2 = string.substring(1, 2);
+
+	let rows = ["a","b","c","d","e","f","g","h"];
+
+	return board[8 - char2][rows.indexOf(char1)];
+}
+
+function playInteraction() {
+	if (interactions.length <= 0) return;
+
+	let func = interactions.shift();
+	func();
+}
+
+function listout(list) {
+	for (let p of list) {
+		console.log(p.rowColumnToString(), p.type);
 	}
 }

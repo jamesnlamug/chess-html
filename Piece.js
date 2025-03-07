@@ -118,7 +118,6 @@ class Piece {
 
 	//returns true for safe moves
 	static vetMoveForChecks(referenceBoard, referencePiece1, referencePiece2, isCapture) {
-
 		//new board disconnected from reference
 		let board = [];
 
@@ -153,8 +152,7 @@ class Piece {
 				
 				piece2 = Piece.makeMove(board, piece2, enPassantedPawn)[1];
 			}
-			piece2.element.remove();
-			game.grid[tempRow][tempColumn] = new EmptyPiece(tempRow, tempColumn, "none");
+			board[tempRow][tempColumn] = new EmptyPiece(tempRow, tempColumn, "none", true);
 		}
 
 		piece1.setPosition(tempRow2, tempColumn2);
@@ -166,7 +164,7 @@ class Piece {
 			let rook = board[piece1.row][(rookOffset === 1 ? 0 : 7)];
 			Piece.makeMove(board, rook, board[piece1.row][piece1.column + rookOffset]);
 		}
-		
+
 		return !Piece.isInCheck(board, referencePiece1.side);
 	}
 
@@ -178,23 +176,26 @@ class Piece {
 		let attackersAndDangers = [];
 
 		let allDangers = [];
-		for (let piece of enemyPieces) {
+		//return false;
 
-			for (let d of piece.getPossibleCaptures(board, "", true)) {
+		for (let i=0; i<enemyPieces.length; i++) {
+			let piece = enemyPieces[i];
+
+			let possibleCaptures = piece.getPossibleCaptures(board, "", true);
+
+			for (let d of possibleCaptures) {
 
 				let ad = {
 					attacker: piece,
 					danger: d
-				}
+				};
 
 				allDangers.push(ad);
 			}
 		}
 
 		for (let ad of allDangers) {
-			if (ad.danger === null) continue;
-			if (ad.danger.constructor.name == "EmptyPiece") continue;
-			if (ad.danger != king) continue;
+			if (ad.danger === null || ad.danger != king || ad.attacker.side == king.side) continue;
 
 			attackersAndDangers.push(ad);
 		}
@@ -259,6 +260,7 @@ class Piece {
 		}
 
 		string += (8 - this.row);
+		if (this.theoretical) string = "TH-" + string;
 		return string;
 	}
 
