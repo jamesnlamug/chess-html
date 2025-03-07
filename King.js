@@ -14,6 +14,7 @@ class King extends Piece {
 
 				possibleMoves = possibleMoves.concat(this.getPossibleMove(board, rr, cc));
 			}
+
 		}
 
 		possibleMoves = possibleMoves.concat(this.getPossibleCastling(board));
@@ -51,8 +52,9 @@ class King extends Piece {
 
 	getPossibleCastling(board) {
 
+
 		let possibleCastles = [];
-		if (this.movedBefore || Piece.isInCheck(board, this.side)) return [];
+		if (this.movedBefore || Piece.isInCheck(board, this.side) || (this.column != 4)) return [];
 
 		let possibleDangers = this.getPossibleDangers(board);
 
@@ -81,14 +83,20 @@ class King extends Piece {
 	getPossibleDangers(board) {
 
 		let enemyPieces = [];
-		let enemyKing;
+		let enemyKing = null;
 
+		let count = 0;
 		for (let r=0; r<board.length; r++) {
 			for (let c=0; c<board[0].length; c++) {
+				count ++;
 				if (board[r][c].side != Piece.opposite(this.side)) continue;
 				if (board[r][c].constructor.name != "King") enemyPieces.push(board[r][c]);
 				else enemyKing = board[r][c];
+
+				if (enemyKing !== null) break;
 			}
+
+			if (enemyKing !== null) break;
 		}
 
 		let possibleDangers = [];
