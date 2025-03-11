@@ -70,6 +70,12 @@ console.log( runTestCase([
 	["H5", "F7"]
 ]));
 
+setupTestCase(["KwH1", "BwB1", "PwA7", "KbH8"], "white", false);
+console.log( runTestCase([
+	["H1", "H2"],
+	["H8", "G7"],
+]));
+
 //
 //
 //
@@ -178,8 +184,8 @@ function selectPiece(piece) {
 	if (currentPieceExists && (isMove || isCapture)) {
 		dehighlightSelectedMoves();
 		
-		game.board.isInCheck(game.playerTurn);
 		game.lastMove = game.board.makeMove(new Move(game.selectedPiece, piece, isCapture));
+		game.board.promotePawns(game.playerTurn);
 
 		//deselect
 		dehighlightSelectedPiece();

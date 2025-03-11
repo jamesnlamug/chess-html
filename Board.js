@@ -262,6 +262,34 @@ class Board {
 		return allMoves.length + allCaptures == 0;
 	}
 
+	promotePawns(side) {
+		let pieces = this.findPieces(side);
+
+		for (let piece of pieces) {
+			if (piece.type != "Pawn") continue;
+			if (piece.row != 0 && piece.row != 7) continue;
+			let inp = prompt("promote to?(Q/R/B/N)");
+			inp = inp.toLowerCase();
+
+			let promotedPiece;
+
+			switch (inp) {
+				case "r": promotedPiece = new Rook(piece.row, piece.column, side); break;
+				case "b": promotedPiece = new Bishop(piece.row, piece.column, side); break;
+				case "n": promotedPiece = new Knight(piece.row, piece.column, side); break;
+				default: promotedPiece = new Queen(piece.row, piece.column, side); break;
+			}
+
+			promotedPiece.movedBefore = true;
+
+			let tempRow = piece.row;
+			let tempColumn = piece.column;
+
+			piece.element.remove();
+			this.set(tempRow, tempColumn, promotedPiece);
+		}
+	}
+
 	findKing(side) {
 		let king = null;
 
