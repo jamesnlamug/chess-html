@@ -9,7 +9,7 @@ class Pawn extends Piece {
 		let currentPiece = this;
 		let nextPiece = board.getDirection(currentPiece, board.getForward(this), 0);
 		
-		while(nextPiece.constructor.name == "EmptyPiece" && distance > 0) {
+		while(nextPiece !== null && nextPiece.constructor.name == "EmptyPiece" && distance > 0) {
 			possibleMoves.push(nextPiece);
 			currentPiece = nextPiece;
 			nextPiece = board.getDirection(currentPiece, board.getForward(this), 0);
