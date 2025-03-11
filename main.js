@@ -1,144 +1,116 @@
 //
-let game = {
-	playerTurn: "white",
-	selectedPiece: null,
-	moves: [],
-	captures: [],
-	grid: [],
-	lastMove: []
-};
+const uiWinner = document.getElementById("ui-checkmate");
 
+let game;
 
-for (let r=0; r<8; r++) {
-	let arr = [];
-	for (let c=0; c<8; c++) {
-		arr.push(null);
-	}
+//
+//
+//
 
-	game.grid.push(arr);
-}
+setupTestCase(["KwH1", "RwB1", "RwA2", "KbH3"], "white", false);
+console.log( runTestCase([
+	["B1", "B3"],
+	["H3", "H4"],
 
-//putPieces();
-
-place("King", "H1", "white");
-place("Queen", "E6", "white");
-place("Rook", "G6", "white");
-place("King", "H8", "black");
-
-for (let r=0; r<8; r++) {
-	for (let c=0; c<8; c++) {
-		if (game.grid[r][c] === null) game.grid[r][c] = new EmptyPiece(r, c, "none");
-		game.grid[r][c].nameSelf();
-	}
-}
-
-let interactions = [];
-let interactionLoop = setInterval(playInteraction, 20);
-
-/*
-play("E2", "E4");
-play("E7", "E5");
-
-play("D1", "G4");
-play("G7", "G5");
-
-play("G4", "F4");
-play("E5", "F4");
-
-play("D2", "D3");
-play("D8", "F6");
-
-play("C1", "D2");
-play("F6", "D4");
-
-play("D2", "B4");
-play("D4", "C3");
-*/
-
-/*
-play("F2", "F3");
-play("E7", "E6");
-
-play("G2", "G4");
-play("D8", "H4");
-*/
-
-/*
-play("E2", "E4");
-play("E7", "E5");
-
-play("D1", "H5");
-play("B8", "C6");
-
-play("F1", "C4");
-play("F8", "C5");
-
-play("H5", "F7");
-*/
-
-function place(className, position, side) {
-	let char1 = position.substring(0, 1).toLowerCase();
-	let char2 = position.substring(1, 2);
-	let rows = ["a","b","c","d","e","f","g","h"];
-	let r = 8 - char2;
-	let c = rows.indexOf(char1);
-
-	let piece;
-
-	switch (className) {
-		case "King":
-			piece = new King(r, c, side); break;
-		
-		case "Queen":
-			piece = new Queen(r, c, side); break;
-
-		case "Rook":
-			piece = new Rook(r, c, side); break;
-
-		case "Knight":
-			piece = new Knight(r, c, side); break;
-
-		case "Bishop":
-			piece = new Bishop(r, c, side); break;
-
-		case "Pawn":
-			piece = new Pawn(r, c, side); break;
-	}
-
-	game.grid[r][c] = piece;
-}
-
-function putPieces() {
-
-	putPieceRow(0, "black");
-	putPawnRow(1, "black");
-
-	putPieceRow(7, "white");
-	putPawnRow(6, "white");
+	["A2", "A4"],
+	["H4", "H5"],
 	
-}
+	["B3", "B5"],
+	["H5", "H6"],
+	
+	["A4", "A6"],
+	["H6", "H7"],
+	
+	["B5", "B7"],
+	["H7", "H8"],
+	
+	["A6", "A8"]
+]));
 
-function putPieceRow(row, side) {
-	game.grid[row][0] = new Rook(row, 0, side);
-	game.grid[row][1] = new Knight(row, 1, side);
-	game.grid[row][2] = new Bishop(row, 2, side);
-	game.grid[row][3] = new Queen(row, 3, side);
-	game.grid[row][4] = new King(row, 4, side);
-	game.grid[row][5] = new Bishop(row, 5, side);
-	game.grid[row][6] = new Knight(row, 6, side);
-	game.grid[row][7] = new Rook(row, 7, side);
+setupTestCase(["KwH1", "RwB1", "RwA2", "KbH3"], "white", false);
+console.log( runTestCase([
+	["B1", "B3"],
+	["H3", "H4"],
 
-}
+	["A2", "A4"],
+	["H4", "H5"],
+	
+	["B3", "B5"],
+	["H5", "H6"],
+	
+	["A4", "A6"],
+	["H6", "H7"],
+	
+	["B5", "B7"],
+	["H7", "H8"],
+	
+	["A6", "G6"]
+]));
 
-function putPawnRow(row, side) {
-	for (let i=0; i<8; i++) {
-		game.grid[row][i] = new Pawn(row, i, side);
+setupTestCase([], "white", true);
+console.log( runTestCase([
+	["F2", "F3"],
+	["E7", "E6"],
+
+	["G2", "G4"],
+	["D8", "H4"]
+]));
+
+setupTestCase([], "white", true);
+console.log( runTestCase([
+	["E2", "E4"],
+	["E7", "E5"],
+
+	["F1", "C4"],
+	["F8", "C5"],
+
+	["D1", "H5"],
+	["B8", "C6"],
+
+	["H5", "F7"]
+]));
+
+//
+//
+//
+
+function setupTestCase(pieceCodes, turn="white", defaultSetup=true) {
+	chessboard.innerHTML = "";
+
+	if (defaultSetup) {
+		game = new Game(turn, new Board());
 	}
+	else {
+		game = new Game(turn, new Board(Board.nullGrid()));
+	
+		for (let pieceCode of pieceCodes) {
+			let type = pieceCode.substring(0, 1);
+			let side = pieceCode.substring(1, 2) == "w" ? "white" : "black";
+			let position = pieceCode.substring(2, 4);
+
+			game.board.place(type, side, position);
+		}
+	
+		game.board.fillNullWithEmptyPieces();
+	}
+
 }
 
-//
-//
-//
+function runTestCase(positionMoveList) {
+	let positionMove;
+	for (let i=0; i<positionMoveList.length-1; i++) {
+		positionMove = positionMoveList[i];
+		tryMove(positionMove[0], positionMove[1]);
+	}
+
+	positionMove = positionMoveList[positionMoveList.length-1];
+	return tryMove(positionMove[0], positionMove[1]);
+}
+
+function tryMove(position1, position2) {
+	selectPiece(game.board.getByPosition(position1));
+	return selectPiece(game.board.getByPosition(position2));
+}
 
 function selectPiece(piece) {
 
@@ -146,7 +118,7 @@ function selectPiece(piece) {
 	let pieceExists = piece !== null;
 
 	//cannot select null
-	if (!pieceExists) return;
+	if (!pieceExists) return "n";
 
 	let pieceIsSameAsCurrentPiece = piece == game.selectedPiece;
 	let pieceIsFriendly = piece.side == game.playerTurn;
@@ -154,7 +126,7 @@ function selectPiece(piece) {
 	let isCapture = game.captures.includes(piece);
 
 	//cannot select unfriendly piece
-	if (!currentPieceExists && !pieceIsFriendly) return;
+	if (!currentPieceExists && !pieceIsFriendly) return "n";
 
 	//deselect
 	if (pieceIsSameAsCurrentPiece || (currentPieceExists && !pieceIsFriendly && !isMove && !isCapture)) {
@@ -162,7 +134,7 @@ function selectPiece(piece) {
 		dehighlightSelectedPiece();
 		dehighlightSelectedMoves();
 		dehighlightSelectedCaptures();
-		return;
+		return "n";
 	}
 
 	//select friendly piece
@@ -175,13 +147,13 @@ function selectPiece(piece) {
 		game.selectedPiece = piece;
 		game.selectedPiece.highlight();
 
-		game.moves = game.selectedPiece.getPossibleMoves(game.grid);
-		game.captures = game.selectedPiece.getPossibleCaptures(game.grid, game.lastMove);
+		game.moves = game.selectedPiece.getPossibleMoves(game.board);
+		game.captures = game.selectedPiece.getPossibleCaptures(game.board, game.lastMove);
 
 		for (let i=game.moves.length-1; i>=0; i--) {
 			
 			let piece = game.moves[i];
-			let vetted = Piece.vetMoveForChecks(game.grid, game.selectedPiece, piece, false);
+			let vetted = game.board.vetMoveForChecks(new Move(game.selectedPiece, piece, false));
 			if (!vetted) {
 				//console.log("REMOVED" + piece.rowColumnToString());
 				game.moves.splice(i, 1);
@@ -192,23 +164,22 @@ function selectPiece(piece) {
 		for (let i=game.captures.length-1; i>=0; i--) {
 			
 			let piece = game.captures[i];
-			let vetted = Piece.vetMoveForChecks(game.grid, game.selectedPiece, piece, true);
+			let vetted = game.board.vetMoveForChecks(new Move(game.selectedPiece, piece, true));
 			if (!vetted) {
 				//console.log("REMOVED" + piece.rowColumnToString());
 				game.captures.splice(i, 1);
 			}
 			else piece.highlight();
 		}
-		return;
+		return "n";
 	}
 	
 	// move/capture
 	if (currentPieceExists && (isMove || isCapture)) {
 		dehighlightSelectedMoves();
 		
-		Piece.isInCheck(game.grid, game.playerTurn);
-
-		game.lastMove = Piece.makeMove(game.grid, game.selectedPiece, piece, isCapture);
+		game.board.isInCheck(game.playerTurn);
+		game.lastMove = game.board.makeMove(new Move(game.selectedPiece, piece, isCapture));
 
 		//deselect
 		dehighlightSelectedPiece();
@@ -216,10 +187,9 @@ function selectPiece(piece) {
 		dehighlightSelectedCaptures();
 		game.playerTurn = Piece.opposite(game.playerTurn);
 
-		if(Piece.checkForCheckmate(game.grid, game.playerTurn)) {
-			endGame(Piece.opposite(game.playerTurn), Piece.isInCheck(game.grid, game.playerTurn));
+		if(game.board.checkForCheckmate(game.playerTurn)) {
+			return endGame(Piece.opposite(game.playerTurn), game.board.isInCheck(game.playerTurn));
 		}
-		return;
 	}
 
 }
@@ -256,11 +226,6 @@ function printBoard(board) {
 	}
 }
 
-function play(string1, string2) {
-	interactions.push(function() { selectPiece(stringToPiece(game.grid, string1)) });
-	interactions.push(function() { selectPiece(stringToPiece(game.grid, string2)) });
-}
-
 function stringToPiece(board, string) {
 	let char1 = string.substring(0, 1).toLowerCase();
 	let char2 = string.substring(1, 2);
@@ -270,27 +235,18 @@ function stringToPiece(board, string) {
 	return board[8 - char2][rows.indexOf(char1)];
 }
 
-function playInteraction() {
-	if (interactions.length <= 0) return;
-
-	let func = interactions.shift();
-	func();
-}
-
 function listout(list) {
 	for (let p of list) {
 		console.log(p.rowColumnToString(), p.type);
 	}
 }
 
-const uiWinner = document.getElementById("ui-checkmate");
-
 function endGame(winner, checkmate) {
 	if (!checkmate) {
 		uiWinner.innerHTML = "Draw - " + winner + " stalemated " + Piece.opposite(winner);
-		return;
+		return "1/2-1/2";
 	}
 
 	uiWinner.innerHTML = winner + " won!";
-	return;
+	return winner == "white" ? "1-0" : "0-1";
 }

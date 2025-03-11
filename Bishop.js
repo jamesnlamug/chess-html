@@ -19,13 +19,13 @@ class Bishop extends Piece {
 		let possibleMoves = [];
 
 		let currentPiece = this;
-		let nextPiece = Piece.direction(board, currentPiece, rowOffset, columnOffset);
+		let nextPiece = board.getDirection(currentPiece, rowOffset, columnOffset);
 
 		while(nextPiece !== null && nextPiece.constructor.name == "EmptyPiece") {
 
 			possibleMoves.push(nextPiece);
 			currentPiece = nextPiece;
-			nextPiece = Piece.direction(board, currentPiece, rowOffset, columnOffset);
+			nextPiece = board.getDirection(currentPiece, rowOffset, columnOffset);
 
 		}
 		return possibleMoves;
@@ -46,12 +46,12 @@ class Bishop extends Piece {
 	getPossibleCaptureDirection(board, rowOffset, columnOffset, kingDanger) {
 		
 		let currentPiece = this;
-		let nextPiece = Piece.direction(board, currentPiece, rowOffset, columnOffset);
+		let nextPiece = board.getDirection(currentPiece, rowOffset, columnOffset);
 
 		while(nextPiece !== null && (nextPiece.constructor.name == "EmptyPiece")) {
 
 			currentPiece = nextPiece;
-			nextPiece = Piece.direction(board, currentPiece, rowOffset, columnOffset);
+			nextPiece = board.getDirection(currentPiece, rowOffset, columnOffset);
 		}
 
 		if (nextPiece === null || (nextPiece.side == this.side && !kingDanger)) return [];

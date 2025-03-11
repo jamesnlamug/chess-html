@@ -19,7 +19,7 @@ class Knight extends Piece {
 	}
 
 	getPossibleMove(board, rowOffset, columnOffset) {
-		let queriedPiece = Piece.direction(board, this, rowOffset, columnOffset);
+		let queriedPiece = board.getDirection(this, rowOffset, columnOffset);
 		if (queriedPiece !== null && queriedPiece.constructor.name == "EmptyPiece") return [queriedPiece];
 		return [];
 	}
@@ -40,7 +40,7 @@ class Knight extends Piece {
 	}
 
 	getPossibleCapture(board, rowOffset, columnOffset, kingDanger) {
-		let queriedPiece = Piece.direction(board, this, rowOffset, columnOffset);
+		let queriedPiece = board.getDirection(this, rowOffset, columnOffset);
 		if (queriedPiece !== null && (kingDanger || queriedPiece.side == Piece.opposite(this.side))) return [queriedPiece];
 		return [];
 	}
